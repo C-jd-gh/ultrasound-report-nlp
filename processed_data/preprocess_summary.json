@@ -1,0 +1,75 @@
+{
+  "source_dir": "C:\\Users\\28128\\Desktop\\NLP\\USData",
+  "output_dir": "C:\\Users\\28128\\Desktop\\NLP\\processed_data",
+  "placeholder_map": {
+    "_SMM_": "毫米数值",
+    "_SCM_": "厘米数值",
+    "_Loc_": "钟点/方位",
+    "_LocR_": "范围方位",
+    "_2DS_": "二维尺寸",
+    "_3DS_": "三维尺寸",
+    "_r_": "纵横比"
+  },
+  "organs": {
+    "thyroid": {
+      "name": "甲状腺",
+      "raw_file": "C:\\Users\\28128\\Desktop\\NLP\\USData\\new_Thyroid2.json",
+      "clean_file": "C:\\Users\\28128\\Desktop\\NLP\\processed_data\\thyroid_clean.json",
+      "total": 2457,
+      "splits": {
+        "train": 1719,
+        "test": 492,
+        "val": 246
+      },
+      "changed_reports": 164,
+      "average_length": 115.28,
+      "placeholders": {
+        "_2DS_": 2662,
+        "_3DS_": 720,
+        "_SCM_": 180,
+        "_r_": 63,
+        "_SMM_": 1
+      }
+    },
+    "mammary": {
+      "name": "乳腺",
+      "raw_file": "C:\\Users\\28128\\Desktop\\NLP\\USData\\new_Mammary2.json",
+      "clean_file": "C:\\Users\\28128\\Desktop\\NLP\\processed_data\\mammary_clean.json",
+      "total": 3513,
+      "splits": {
+        "train": 2458,
+        "test": 703,
+        "val": 352
+      },
+      "changed_reports": 23,
+      "average_length": 100.06,
+      "placeholders": {
+        "_2DS_": 2648,
+        "_SCM_": 2437,
+        "_Loc_": 1936,
+        "_3DS_": 332,
+        "_LocR_": 94,
+        "_SMM_": 64
+      }
+    },
+    "liver": {
+      "name": "肝胆胰脾",
+      "raw_file": "C:\\Users\\28128\\Desktop\\NLP\\USData\\new_Liver2.json",
+      "clean_file": "C:\\Users\\28128\\Desktop\\NLP\\processed_data\\liver_clean.json",
+      "total": 1394,
+      "splits": {
+        "train": 975,
+        "test": 279,
+        "val": 140
+      },
+      "changed_reports": 1,
+      "average_length": 161.95,
+      "placeholders": {
+        "_SCM_": 590,
+        "_2DS_": 458,
+        "_3DS_": 9,
+        "_SMM_": 1
+      }
+    }
+  }
+}
