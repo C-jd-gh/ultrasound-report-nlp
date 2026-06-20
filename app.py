@@ -1,119 +1,130 @@
 from __future__ import annotations
 
-import json
-import mimetypes
-from http import HTTPStatus
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
-from nlp_pipeline import (
+from flask import Flask, jsonify, request, send_from_directory
+
+from ultrasound_nlp.nlp_pipeline import (
     ORGAN_CONFIG,
     analyze_report,
+    cluster_for_report,
     dataset_stats,
     dictionary_view,
+    model_metrics,
+    nearest_vector_terms,
+    ner_metrics,
+    predict_label,
     sample_report,
     similar_reports,
+    vector_model_metrics,
 )
 
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 
-
-class UltrasoundNLPHandler(BaseHTTPRequestHandler):
-    server_version = "UltrasoundNLP/1.0"
-
-    def do_GET(self) -> None:
-        parsed = urlparse(self.path)
-        if parsed.path == "/":
-            self._serve_file(STATIC_DIR / "index.html")
-            return
-        if parsed.path.startswith("/static/"):
-            safe_name = parsed.path.removeprefix("/static/").replace("/", "\\")
-            path = (STATIC_DIR / safe_name).resolve()
-            if not str(path).startswith(str(STATIC_DIR.resolve())):
-                self._send_json({"error": "invalid static path"}, HTTPStatus.BAD_REQUEST)
-                return
-            self._serve_file(path)
-            return
-        if parsed.path == "/api/report/sample":
-            query = parse_qs(parsed.query)
-            organ = query.get("organ", ["thyroid"])[0]
-            index = int(query.get("index", ["0"])[0] or "0")
-            self._send_json(sample_report(organ, index))
-            return
-        if parsed.path == "/api/stats":
-            self._send_json(dataset_stats())
-            return
-        if parsed.path == "/api/dictionary":
-            self._send_json(dictionary_view())
-            return
-        if parsed.path == "/api/organs":
-            self._send_json({"organs": [{"key": key, "name": value["name"]} for key, value in ORGAN_CONFIG.items()]})
-            return
-        self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
-
-    def do_POST(self) -> None:
-        parsed = urlparse(self.path)
-        try:
-            payload = self._read_json()
-        except ValueError as exc:
-            self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
-            return
-
-        if parsed.path == "/api/analyze":
-            text = str(payload.get("text", ""))
-            organ = str(payload.get("organ", "thyroid"))
-            self._send_json(analyze_report(text, organ))
-            return
-        if parsed.path == "/api/similar":
-            text = str(payload.get("text", ""))
-            organ = str(payload.get("organ", "thyroid"))
-            limit = int(payload.get("limit", 5) or 5)
-            self._send_json({"items": similar_reports(text, organ, limit)})
-            return
-        self._send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
-
-    def log_message(self, format: str, *args) -> None:
-        print(f"{self.address_string()} - {format % args}")
-
-    def _read_json(self) -> dict:
-        length = int(self.headers.get("Content-Length", "0") or "0")
-        if length <= 0:
-            return {}
-        raw = self.rfile.read(length)
-        try:
-            return json.loads(raw.decode("utf-8"))
-        except json.JSONDecodeError as exc:
-            raise ValueError(f"invalid json: {exc}") from exc
-
-    def _send_json(self, payload: dict, status: HTTPStatus = HTTPStatus.OK) -> None:
-        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def _serve_file(self, path: Path) -> None:
-        if not path.exists() or not path.is_file():
-            self._send_json({"error": "file not found"}, HTTPStatus.NOT_FOUND)
-            return
-        mime_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
-        body = path.read_bytes()
-        self.send_response(HTTPStatus.OK)
-        self.send_header("Content-Type", f"{mime_type}; charset=utf-8" if mime_type.startswith("text/") else mime_type)
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+app = Flask(__name__, static_folder=str(STATIC_DIR), static_url_path="/static")
 
 
-def run(host: str = "127.0.0.1", port: int = 8000) -> None:
-    server = ThreadingHTTPServer((host, port), UltrasoundNLPHandler)
-    print(f"Ultrasound NLP app running at http://{host}:{port}")
-    print("Press Ctrl+C to stop.")
-    server.serve_forever()
+@app.get("/")
+def index():
+    return send_from_directory(STATIC_DIR, "index.html")
+
+
+@app.get("/api/organs")
+def organs():
+    return jsonify({"organs": [{"key": key, "name": value["name"]} for key, value in ORGAN_CONFIG.items()]})
+
+
+@app.get("/api/report/sample")
+def report_sample():
+    organ = request.args.get("organ", "thyroid")
+    index = request.args.get("index", "0")
+    try:
+        sample_index = int(index)
+    except ValueError:
+        sample_index = 0
+    return jsonify(sample_report(organ, sample_index))
+
+
+@app.get("/api/stats")
+def stats():
+    return jsonify(dataset_stats())
+
+
+@app.get("/api/dictionary")
+def dictionary():
+    return jsonify(dictionary_view())
+
+
+@app.post("/api/analyze")
+def analyze():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", ""))
+    organ = str(payload.get("organ", "thyroid"))
+    return jsonify(analyze_report(text, organ))
+
+
+@app.post("/api/predict")
+def predict():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", ""))
+    organ = str(payload.get("organ", "thyroid"))
+    top_k = int(payload.get("top_k", 3) or 3)
+    return jsonify(predict_label(text, organ, top_k))
+
+
+@app.get("/api/model/metrics")
+def metrics():
+    return jsonify(model_metrics())
+
+
+@app.get("/api/ner/metrics")
+def sequence_ner_metrics():
+    return jsonify(ner_metrics())
+
+
+@app.get("/api/vector/metrics")
+def vectors_metrics():
+    return jsonify(vector_model_metrics())
+
+
+@app.post("/api/cluster")
+def cluster():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", ""))
+    organ = str(payload.get("organ", "thyroid"))
+    top_k = int(payload.get("top_k", 5) or 5)
+    return jsonify(cluster_for_report(text, organ, top_k))
+
+
+@app.post("/api/vector/nearest")
+def vector_nearest():
+    payload = request.get_json(silent=True) or {}
+    term = str(payload.get("term", "结节"))
+    top_k = int(payload.get("top_k", 10) or 10)
+    return jsonify(nearest_vector_terms(term, top_k))
+
+
+@app.post("/api/similar")
+def similar():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", ""))
+    organ = str(payload.get("organ", "thyroid"))
+    try:
+        limit = int(payload.get("limit", 5) or 5)
+    except ValueError:
+        limit = 5
+    return jsonify({"items": similar_reports(text, organ, limit)})
+
+
+@app.errorhandler(404)
+def not_found(_error):
+    return jsonify({"error": "not found"}), 404
+
+
+def run(host: str = "127.0.0.1", port: int = 8000, debug: bool = False) -> None:
+    app.run(host=host, port=port, debug=debug)
 
 
 if __name__ == "__main__":

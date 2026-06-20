@@ -1,0 +1,544 @@
+{
+  "model_ready": true,
+  "model_name": "Weak BIO + CRF",
+  "organs": {
+    "thyroid": {
+      "name": "甲状腺",
+      "model_path": "C:\\Users\\28128\\Desktop\\NLP\\models\\thyroid_sequence_ner.pkl",
+      "train_count": 1719,
+      "test_count": 492,
+      "label_distribution": {
+        "B-ORGAN": 2805,
+        "I-ORGAN": 5005,
+        "B-STATUS": 4334,
+        "I-STATUS": 27157,
+        "O": 53877,
+        "B-BLOOD": 5342,
+        "I-BLOOD": 37889,
+        "B-LOCATION": 4756,
+        "I-LOCATION": 9198,
+        "B-LESION": 2131,
+        "I-LESION": 8113,
+        "B-ECHO": 1454,
+        "I-ECHO": 4707,
+        "B-MEASUREMENT": 2422,
+        "I-MEASUREMENT": 9688,
+        "B-BOUNDARY": 1468,
+        "I-BOUNDARY": 4657,
+        "B-SHAPE": 1771,
+        "I-SHAPE": 5718,
+        "B-SURGERY": 105,
+        "I-SURGERY": 4151,
+        "B-LYMPH": 99,
+        "I-LYMPH": 1884
+      },
+      "weighted_f1": 0.9852,
+      "classification_report": {
+        "B-BLOOD": {
+          "precision": 0.97556142668428,
+          "recall": 0.9872994652406417,
+          "f1-score": 0.9813953488372092,
+          "support": 1496.0
+        },
+        "B-BOUNDARY": {
+          "precision": 0.9929577464788732,
+          "recall": 1.0,
+          "f1-score": 0.9964664310954063,
+          "support": 423.0
+        },
+        "B-ECHO": {
+          "precision": 0.9832935560859188,
+          "recall": 0.9832935560859188,
+          "f1-score": 0.9832935560859188,
+          "support": 419.0
+        },
+        "B-LESION": {
+          "precision": 0.9887096774193549,
+          "recall": 0.9903069466882067,
+          "f1-score": 0.9895076674737692,
+          "support": 619.0
+        },
+        "B-LOCATION": {
+          "precision": 0.9961685823754789,
+          "recall": 0.9954058192955589,
+          "f1-score": 0.995787054768288,
+          "support": 1306.0
+        },
+        "B-LYMPH": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        },
+        "B-MEASUREMENT": {
+          "precision": 0.9886363636363636,
+          "recall": 0.9942857142857143,
+          "f1-score": 0.9914529914529915,
+          "support": 700.0
+        },
+        "B-ORGAN": {
+          "precision": 0.9939613526570048,
+          "recall": 0.9903730445246691,
+          "f1-score": 0.9921639541892706,
+          "support": 831.0
+        },
+        "B-SHAPE": {
+          "precision": 0.9941520467836257,
+          "recall": 0.99609375,
+          "f1-score": 0.9951219512195122,
+          "support": 512.0
+        },
+        "B-STATUS": {
+          "precision": 0.9991902834008097,
+          "recall": 0.9983818770226537,
+          "f1-score": 0.9987859166329421,
+          "support": 1236.0
+        },
+        "B-SURGERY": {
+          "precision": 0.9166666666666666,
+          "recall": 1.0,
+          "f1-score": 0.9565217391304348,
+          "support": 22.0
+        },
+        "I-BLOOD": {
+          "precision": 0.9908748824082785,
+          "recall": 0.9893856847642307,
+          "f1-score": 0.9901297236322617,
+          "support": 10646.0
+        },
+        "I-BOUNDARY": {
+          "precision": 0.993338267949667,
+          "recall": 1.0,
+          "f1-score": 0.9966580022279985,
+          "support": 1342.0
+        },
+        "I-ECHO": {
+          "precision": 0.9795471146822499,
+          "recall": 0.9774052478134111,
+          "f1-score": 0.9784750091207588,
+          "support": 1372.0
+        },
+        "I-LESION": {
+          "precision": 0.9814655172413793,
+          "recall": 0.9789337919174549,
+          "f1-score": 0.9801980198019802,
+          "support": 2326.0
+        },
+        "I-LOCATION": {
+          "precision": 0.9941882991088725,
+          "recall": 0.9961180124223602,
+          "f1-score": 0.9951522202831103,
+          "support": 2576.0
+        },
+        "I-LYMPH": {
+          "precision": 0.9842209072978304,
+          "recall": 0.9072727272727272,
+          "f1-score": 0.9441816461684012,
+          "support": 550.0
+        },
+        "I-MEASUREMENT": {
+          "precision": 0.9886201991465149,
+          "recall": 0.9928571428571429,
+          "f1-score": 0.9907341411261582,
+          "support": 2800.0
+        },
+        "I-ORGAN": {
+          "precision": 0.9945429740791268,
+          "recall": 0.9918367346938776,
+          "f1-score": 0.9931880108991825,
+          "support": 1470.0
+        },
+        "I-SHAPE": {
+          "precision": 0.9946332737030411,
+          "recall": 0.9875666074600356,
+          "f1-score": 0.9910873440285205,
+          "support": 1689.0
+        },
+        "I-STATUS": {
+          "precision": 0.9980769230769231,
+          "recall": 0.9984609465178915,
+          "f1-score": 0.9982688978649741,
+          "support": 7797.0
+        },
+        "I-SURGERY": {
+          "precision": 0.6994219653179191,
+          "recall": 0.7159763313609467,
+          "f1-score": 0.7076023391812866,
+          "support": 845.0
+        },
+        "micro avg": {
+          "precision": 0.9853142076502732,
+          "recall": 0.9850498743994341,
+          "f1-score": 0.9851820232941033,
+          "support": 41003.0
+        },
+        "macro avg": {
+          "precision": 0.974010364827281,
+          "recall": 0.9759660636465199,
+          "f1-score": 0.974825998419108,
+          "support": 41003.0
+        },
+        "weighted avg": {
+          "precision": 0.9854602621242364,
+          "recall": 0.9850498743994341,
+          "f1-score": 0.9852278615904706,
+          "support": 41003.0
+        }
+      }
+    },
+    "mammary": {
+      "name": "乳腺",
+      "model_path": "C:\\Users\\28128\\Desktop\\NLP\\models\\mammary_sequence_ner.pkl",
+      "train_count": 2458,
+      "test_count": 703,
+      "label_distribution": {
+        "B-LOCATION": 8893,
+        "I-LOCATION": 22709,
+        "B-ORGAN": 6758,
+        "I-ORGAN": 8653,
+        "O": 76094,
+        "B-STATUS": 3529,
+        "I-STATUS": 27509,
+        "B-ECHO": 794,
+        "I-ECHO": 2956,
+        "B-MEASUREMENT": 5110,
+        "I-MEASUREMENT": 20509,
+        "B-LESION": 2394,
+        "I-LESION": 9593,
+        "B-BOUNDARY": 1443,
+        "I-BOUNDARY": 4493,
+        "B-SHAPE": 1520,
+        "I-SHAPE": 4793,
+        "B-BLOOD": 3159,
+        "I-BLOOD": 17608,
+        "B-SURGERY": 378,
+        "I-SURGERY": 9754,
+        "B-LYMPH": 353,
+        "I-LYMPH": 6384
+      },
+      "weighted_f1": 0.9923,
+      "classification_report": {
+        "B-BLOOD": {
+          "precision": 0.9936507936507937,
+          "recall": 0.9873817034700315,
+          "f1-score": 0.990506329113924,
+          "support": 951.0
+        },
+        "B-BOUNDARY": {
+          "precision": 1.0,
+          "recall": 0.9882352941176471,
+          "f1-score": 0.9940828402366864,
+          "support": 425.0
+        },
+        "B-ECHO": {
+          "precision": 0.9826086956521739,
+          "recall": 0.9826086956521739,
+          "f1-score": 0.9826086956521739,
+          "support": 230.0
+        },
+        "B-LESION": {
+          "precision": 0.9956331877729258,
+          "recall": 0.9898697539797395,
+          "f1-score": 0.9927431059506531,
+          "support": 691.0
+        },
+        "B-LOCATION": {
+          "precision": 0.9968701095461658,
+          "recall": 0.9976507439310884,
+          "f1-score": 0.9972602739726028,
+          "support": 2554.0
+        },
+        "B-LYMPH": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 84.0
+        },
+        "B-MEASUREMENT": {
+          "precision": 0.9960343688037012,
+          "recall": 0.9966931216931217,
+          "f1-score": 0.9963636363636363,
+          "support": 1512.0
+        },
+        "B-ORGAN": {
+          "precision": 0.997421351211965,
+          "recall": 0.9989669421487604,
+          "f1-score": 0.9981935483870967,
+          "support": 1936.0
+        },
+        "B-SHAPE": {
+          "precision": 1.0,
+          "recall": 0.9931818181818182,
+          "f1-score": 0.9965792474344356,
+          "support": 440.0
+        },
+        "B-STATUS": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 999.0
+        },
+        "B-SURGERY": {
+          "precision": 0.9814814814814815,
+          "recall": 0.9906542056074766,
+          "f1-score": 0.986046511627907,
+          "support": 107.0
+        },
+        "I-BLOOD": {
+          "precision": 0.999034749034749,
+          "recall": 0.9919493962047153,
+          "f1-score": 0.9954794652303549,
+          "support": 5217.0
+        },
+        "I-BOUNDARY": {
+          "precision": 1.0,
+          "recall": 0.98796992481203,
+          "f1-score": 0.9939485627836612,
+          "support": 1330.0
+        },
+        "I-ECHO": {
+          "precision": 0.9817559863169898,
+          "recall": 0.9862542955326461,
+          "f1-score": 0.984,
+          "support": 873.0
+        },
+        "I-LESION": {
+          "precision": 0.9945275446917183,
+          "recall": 0.9901925172539048,
+          "f1-score": 0.9923552966872953,
+          "support": 2753.0
+        },
+        "I-LOCATION": {
+          "precision": 0.9970979074385214,
+          "recall": 0.9987760097919217,
+          "f1-score": 0.9979362531529465,
+          "support": 6536.0
+        },
+        "I-LYMPH": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 1566.0
+        },
+        "I-MEASUREMENT": {
+          "precision": 0.9960435212660732,
+          "recall": 0.9960435212660732,
+          "f1-score": 0.9960435212660732,
+          "support": 6066.0
+        },
+        "I-ORGAN": {
+          "precision": 0.9971717171717172,
+          "recall": 0.9991902834008097,
+          "f1-score": 0.9981799797775531,
+          "support": 2470.0
+        },
+        "I-SHAPE": {
+          "precision": 1.0,
+          "recall": 0.9927745664739884,
+          "f1-score": 0.9963741841914431,
+          "support": 1384.0
+        },
+        "I-STATUS": {
+          "precision": 0.9974460477589069,
+          "recall": 1.0,
+          "f1-score": 0.9987213911264544,
+          "support": 7811.0
+        },
+        "I-SURGERY": {
+          "precision": 0.9108645753634277,
+          "recall": 0.9271806853582555,
+          "f1-score": 0.9189502122732536,
+          "support": 2568.0
+        },
+        "micro avg": {
+          "precision": 0.9923097540358329,
+          "recall": 0.9923097540358329,
+          "f1-score": 0.9923097540358329,
+          "support": 48503.0
+        },
+        "macro avg": {
+          "precision": 0.9917110016891505,
+          "recall": 0.9907078854034638,
+          "f1-score": 0.9911987752376432,
+          "support": 48503.0
+        },
+        "weighted avg": {
+          "precision": 0.9923953133353756,
+          "recall": 0.9923097540358329,
+          "f1-score": 0.9923443935153541,
+          "support": 48503.0
+        }
+      }
+    },
+    "liver": {
+      "name": "肝胆胰脾",
+      "model_path": "C:\\Users\\28128\\Desktop\\NLP\\models\\liver_sequence_ner.pkl",
+      "train_count": 975,
+      "test_count": 279,
+      "label_distribution": {
+        "B-ORGAN": 6550,
+        "I-ORGAN": 8122,
+        "O": 72621,
+        "B-BOUNDARY": 1890,
+        "I-BOUNDARY": 4658,
+        "B-ECHO": 3313,
+        "I-ECHO": 13538,
+        "B-STATUS": 5201,
+        "I-STATUS": 29605,
+        "B-LESION": 1198,
+        "I-LESION": 4431,
+        "B-LOCATION": 235,
+        "I-LOCATION": 400,
+        "B-MEASUREMENT": 725,
+        "I-MEASUREMENT": 2900,
+        "B-SHAPE": 64,
+        "I-SHAPE": 210,
+        "B-BLOOD": 208,
+        "I-BLOOD": 1296,
+        "B-SURGERY": 52,
+        "I-SURGERY": 907
+      },
+      "weighted_f1": 0.9987,
+      "classification_report": {
+        "B-BLOOD": {
+          "precision": 0.9622641509433962,
+          "recall": 1.0,
+          "f1-score": 0.9807692307692307,
+          "support": 51.0
+        },
+        "B-BOUNDARY": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 551.0
+        },
+        "B-ECHO": {
+          "precision": 1.0,
+          "recall": 0.9978880675818373,
+          "f1-score": 0.9989429175475687,
+          "support": 947.0
+        },
+        "B-LESION": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 344.0
+        },
+        "B-LOCATION": {
+          "precision": 1.0,
+          "recall": 0.9836065573770492,
+          "f1-score": 0.9917355371900827,
+          "support": 61.0
+        },
+        "B-MEASUREMENT": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 202.0
+        },
+        "B-ORGAN": {
+          "precision": 0.9994689325544344,
+          "recall": 0.9989384288747346,
+          "f1-score": 0.9992036102999734,
+          "support": 1884.0
+        },
+        "B-SHAPE": {
+          "precision": 0.9583333333333334,
+          "recall": 1.0,
+          "f1-score": 0.9787234042553191,
+          "support": 23.0
+        },
+        "B-STATUS": {
+          "precision": 1.0,
+          "recall": 0.9993324432576769,
+          "f1-score": 0.9996661101836394,
+          "support": 1498.0
+        },
+        "B-SURGERY": {
+          "precision": 0.9090909090909091,
+          "recall": 1.0,
+          "f1-score": 0.9523809523809523,
+          "support": 10.0
+        },
+        "I-BLOOD": {
+          "precision": 1.0,
+          "recall": 0.9935064935064936,
+          "f1-score": 0.996742671009772,
+          "support": 308.0
+        },
+        "I-BOUNDARY": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 1353.0
+        },
+        "I-ECHO": {
+          "precision": 0.9994845360824742,
+          "recall": 0.9987123358228174,
+          "f1-score": 0.9990982867448152,
+          "support": 3883.0
+        },
+        "I-LESION": {
+          "precision": 0.9984276729559748,
+          "recall": 1.0,
+          "f1-score": 0.999213217938631,
+          "support": 1270.0
+        },
+        "I-LOCATION": {
+          "precision": 1.0,
+          "recall": 0.9803921568627451,
+          "f1-score": 0.9900990099009901,
+          "support": 102.0
+        },
+        "I-MEASUREMENT": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 808.0
+        },
+        "I-ORGAN": {
+          "precision": 0.9995715509854327,
+          "recall": 0.9991434689507495,
+          "f1-score": 0.9993574641250803,
+          "support": 2335.0
+        },
+        "I-SHAPE": {
+          "precision": 0.9493670886075949,
+          "recall": 1.0,
+          "f1-score": 0.974025974025974,
+          "support": 75.0
+        },
+        "I-STATUS": {
+          "precision": 1.0,
+          "recall": 0.9995305164319249,
+          "f1-score": 0.999765203099319,
+          "support": 8520.0
+        },
+        "I-SURGERY": {
+          "precision": 0.8415841584158416,
+          "recall": 1.0,
+          "f1-score": 0.9139784946236559,
+          "support": 170.0
+        },
+        "micro avg": {
+          "precision": 0.9981162981162981,
+          "recall": 0.9991391678622669,
+          "f1-score": 0.9986274710642221,
+          "support": 24395.0
+        },
+        "macro avg": {
+          "precision": 0.9808796166484696,
+          "recall": 0.9975525234333015,
+          "f1-score": 0.9886851042047502,
+          "support": 24395.0
+        },
+        "weighted avg": {
+          "precision": 0.9983390254059368,
+          "recall": 0.9991391678622669,
+          "f1-score": 0.9986866858498306,
+          "support": 24395.0
+        }
+      }
+    }
+  }
+}

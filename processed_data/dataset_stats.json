@@ -26,7 +26,11 @@
       "top_terms": [
         {
           "word": "CDFI",
-          "count": 2707
+          "count": 4745
+        },
+        {
+          "word": "可见",
+          "count": 2873
         },
         {
           "word": "_2DS_",
@@ -34,75 +38,71 @@
         },
         {
           "word": "甲状腺",
-          "count": 2512
+          "count": 2596
         },
         {
-          "word": "颈部",
-          "count": 2406
+          "word": "腺体内",
+          "count": 2412
         },
         {
-          "word": "双侧",
-          "count": 2268
+          "word": "双侧颈部",
+          "count": 2240
         },
         {
-          "word": "CD",
-          "count": 2002
+          "word": "未见明显肿大淋巴结",
+          "count": 2100
         },
         {
-          "word": "FI示腺体内",
-          "count": 1999
+          "word": "边界清晰",
+          "count": 1860
         },
         {
-          "word": "显肿大淋巴结",
-          "count": 1948
+          "word": "未见异常血流信号",
+          "count": 1840
+        },
+        {
+          "word": "大小形态如常",
+          "count": 1839
         },
         {
           "word": "形态规整",
           "count": 1838
         },
         {
-          "word": "大小形态如常",
-          "count": 1837
-        },
-        {
-          "word": "未见异常血流信号",
-          "count": 1715
-        },
-        {
           "word": "右叶",
-          "count": 1634
-        },
-        {
-          "word": "边界清晰",
-          "count": 1622
+          "count": 1679
         },
         {
           "word": "左叶",
-          "count": 1569
+          "count": 1616
         },
         {
           "word": "腺体回声均匀",
-          "count": 1501
+          "count": 1605
+        },
+        {
+          "word": "位于",
+          "count": 1419
+        },
+        {
+          "word": "血流信号",
+          "count": 991
         },
         {
           "word": "未探及血流信号",
-          "count": 864
+          "count": 896
+        },
+        {
+          "word": "结节",
+          "count": 832
+        },
+        {
+          "word": "周边",
+          "count": 767
         },
         {
           "word": "_3DS_",
           "count": 720
-        },
-        {
-          "word": "中部",
-          "count": 678
-        },
-        {
-          "word": "下极",
-          "count": 673
-        },
-        {
-          "word": "可探及血流信号",
-          "count": 628
         }
       ]
     },
@@ -145,19 +145,39 @@
       "top_terms": [
         {
           "word": "乳腺",
-          "count": 7448
+          "count": 7936
         },
         {
           "word": "双侧",
-          "count": 7425
+          "count": 7451
+        },
+        {
+          "word": "结构",
+          "count": 3892
         },
         {
           "word": "腋下",
-          "count": 3775
+          "count": 3735
+        },
+        {
+          "word": "紊乱",
+          "count": 3248
+        },
+        {
+          "word": "腺体",
+          "count": 3181
+        },
+        {
+          "word": "可见",
+          "count": 2940
         },
         {
           "word": "CDFI",
-          "count": 2900
+          "count": 2908
+        },
+        {
+          "word": "扩张",
+          "count": 2792
         },
         {
           "word": "_2DS_",
@@ -169,59 +189,39 @@
         },
         {
           "word": "_SCM_",
-          "count": 2432
+          "count": 2437
         },
         {
-          "word": "占位性病变",
-          "count": 2241
+          "word": "未见明显肿大淋巴结",
+          "count": 2272
         },
         {
           "word": "左侧",
-          "count": 2120
+          "count": 2132
         },
         {
           "word": "右侧",
-          "count": 2115
-        },
-        {
-          "word": "腺体结构稍紊",
-          "count": 2099
+          "count": 2126
         },
         {
           "word": "乳头",
           "count": 2068
         },
         {
-          "word": "显肿大淋巴结",
-          "count": 2032
+          "word": "_Loc_",
+          "count": 1936
         },
         {
-          "word": "_Loc_",
-          "count": 1932
+          "word": "边界清晰",
+          "count": 1914
+        },
+        {
+          "word": "未见明确占位性病变",
+          "count": 1900
         },
         {
           "word": "形态规整",
           "count": 1833
-        },
-        {
-          "word": "边界清晰",
-          "count": 1768
-        },
-        {
-          "word": "低回声结节",
-          "count": 1399
-        },
-        {
-          "word": "未探及血流信号",
-          "count": 1347
-        },
-        {
-          "word": "皮下",
-          "count": 906
-        },
-        {
-          "word": "腺体结构紊乱",
-          "count": 818
         }
       ]
     },
@@ -262,15 +262,15 @@
       "top_terms": [
         {
           "word": "大小形态如常",
-          "count": 3943
+          "count": 3956
         },
         {
-          "word": "占位性病变",
-          "count": 2616
+          "word": "回声均匀",
+          "count": 2726
         },
         {
-          "word": "实质回声均匀",
-          "count": 2460
+          "word": "实质",
+          "count": 2476
         },
         {
           "word": "门静脉",
@@ -281,69 +281,69 @@
           "count": 1600
         },
         {
+          "word": "扩张",
+          "count": 1562
+        },
+        {
+          "word": "肝脏",
+          "count": 1400
+        },
+        {
           "word": "脾脏",
-          "count": 1386
+          "count": 1395
         },
         {
           "word": "胰腺",
-          "count": 1383
+          "count": 1393
+        },
+        {
+          "word": "主干",
+          "count": 1385
+        },
+        {
+          "word": "胆囊",
+          "count": 1378
         },
         {
           "word": "实质回声细密增强",
           "count": 1362
         },
         {
-          "word": "胆囊",
-          "count": 1301
+          "word": "未见明确占位性病变",
+          "count": 1354
+        },
+        {
+          "word": "占位性病变",
+          "count": 1262
+        },
+        {
+          "word": "饱满",
+          "count": 1247
         },
         {
           "word": "壁不厚",
           "count": 1215
         },
         {
+          "word": "内外",
+          "count": 1200
+        },
+        {
           "word": "未见明显异常回声",
           "count": 1090
         },
         {
-          "word": "显示欠清晰",
-          "count": 1002
+          "word": "范围",
+          "count": 1047
         },
         {
-          "word": "包膜光滑",
-          "count": 1001
-        },
-        {
-          "word": "回声对比增强",
-          "count": 962
-        },
-        {
-          "word": "肝脏形态饱满",
-          "count": 953
-        },
-        {
-          "word": "_SCM_",
-          "count": 590
-        },
-        {
-          "word": "_2DS_",
-          "count": 458
-        },
-        {
-          "word": "肝脏",
-          "count": 339
-        },
-        {
-          "word": "回声均匀",
-          "count": 267
-        },
-        {
-          "word": "声影",
-          "count": 255
+          "word": "正常",
+          "count": 1009
         }
       ]
     }
   },
-  "dictionary_size": 1131,
+  "dictionary_size": 301,
   "placeholder_map": {
     "_SMM_": "毫米数值",
     "_SCM_": "厘米数值",

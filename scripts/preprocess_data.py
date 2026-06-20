@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
 
-from nlp_pipeline import (
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from ultrasound_nlp.nlp_pipeline import (
     DATA_DIR,
     ORGAN_CONFIG,
     PLACEHOLDER_MAP,
@@ -16,6 +21,7 @@ from nlp_pipeline import (
     dataset_stats,
     load_corpus,
     tokenize,
+    write_jieba_userdict,
 )
 
 
@@ -104,6 +110,7 @@ def preprocess_dataset() -> dict:
             "terms": list(build_dictionary()),
         },
     )
+    write_jieba_userdict()
     return summary
 
 

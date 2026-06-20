@@ -232,6 +232,94 @@ textarea {
   font-size: 13px;
 }
 
+.chip.danger {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #9f1239;
+}
+
+.chip.ok {
+  background: #f0fff4;
+  border-color: #b7e4c7;
+  color: #276749;
+}
+
+.pos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pos-item {
+  display: inline-grid;
+  gap: 2px;
+  min-height: 42px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfcfd;
+}
+
+.pos-item.medical {
+  border-color: #b8d9d5;
+  background: #e7f5f4;
+}
+
+.pos-item strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pos-item small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.evidence-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.compact-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cluster-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.cluster-profile {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.cluster-profile-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cluster-profile-head strong {
+  font-size: 14px;
+}
+
+.cluster-profile-head span {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .rank-list {
   display: grid;
   gap: 8px;
@@ -308,7 +396,9 @@ pre {
 .quality-list,
 .similar-list,
 .stats-grid,
-.dict-grid {
+.dict-grid,
+.metrics-grid,
+.prediction-panel {
   display: grid;
   gap: 12px;
 }
@@ -316,7 +406,9 @@ pre {
 .quality-item,
 .similar-item,
 .stat-block,
-.dict-block {
+.dict-block,
+.metric-block,
+.prediction-card {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 14px;
@@ -340,18 +432,58 @@ pre {
 
 .similar-item h3,
 .stat-block h3,
-.dict-block h3 {
+.dict-block h3,
+.metric-block h3,
+.prediction-card h3 {
   margin: 0 0 8px;
   font-size: 15px;
 }
 
 .similar-item p,
 .stat-block p,
-.dict-block p {
+.dict-block p,
+.metric-block p,
+.prediction-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.6;
   font-size: 13px;
+}
+
+.prediction-main {
+  display: grid;
+  grid-template-columns: minmax(110px, 160px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.prediction-label {
+  color: var(--accent-dark);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.prob-list {
+  display: grid;
+  gap: 8px;
+}
+
+.confusion-wrap {
+  overflow: auto;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.confusion-table {
+  min-width: 0;
+}
+
+.confusion-table th,
+.confusion-table td {
+  min-width: 48px;
+  text-align: center;
+  font-size: 12px;
 }
 
 .mini-bars {

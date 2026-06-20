@@ -53,8 +53,28 @@
             </div>
 
             <section class="band">
+              <h2>标签预测</h2>
+              <div id="predictionPanel" class="prediction-panel"></div>
+            </section>
+
+            <section class="band">
+              <h2>征象倾向提示</h2>
+              <div id="riskPanel" class="prediction-panel"></div>
+            </section>
+
+            <section class="band">
+              <h2>聚类结果</h2>
+              <div id="clusterPanel" class="prediction-panel"></div>
+            </section>
+
+            <section class="band">
               <h2>分词结果</h2>
               <div id="tokens" class="chips"></div>
+            </section>
+
+            <section class="band">
+              <h2>词性标注</h2>
+              <div id="posTags" class="pos-grid"></div>
             </section>
 
             <section class="band two-col">
@@ -66,6 +86,11 @@
                 <h2>词频关键词</h2>
                 <div id="freqKeywords" class="rank-list"></div>
               </div>
+            </section>
+
+            <section class="band">
+              <h2>TextRank 关键词</h2>
+              <div id="textrankKeywords" class="rank-list"></div>
             </section>
 
             <section class="band">
@@ -102,6 +127,40 @@
               </div>
             </section>
 
+            <section class="band">
+              <h2>CRF 序列实体识别</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>类型</th>
+                      <th>实体</th>
+                      <th>位置</th>
+                      <th>来源</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sequenceRows"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="band">
+              <h2>病灶-器官关系抽取</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>主体</th>
+                      <th>关系</th>
+                      <th>病灶</th>
+                      <th>属性</th>
+                    </tr>
+                  </thead>
+                  <tbody id="relationRows"></tbody>
+                </table>
+              </div>
+            </section>
+
             <section class="band two-col">
               <div>
                 <h2>文本规范化</h2>
@@ -131,9 +190,25 @@
           <h2>数据集概览</h2>
           <div id="statsGrid" class="stats-grid"></div>
         </section>
+        <section class="band">
+          <h2>分类模型评估</h2>
+          <div id="modelMetrics" class="metrics-grid"></div>
+        </section>
+        <section class="band">
+          <h2>CRF 实体模型评估</h2>
+          <div id="nerMetrics" class="metrics-grid"></div>
+        </section>
+        <section class="band">
+          <h2>报告聚类分析</h2>
+          <div id="vectorMetrics" class="metrics-grid"></div>
+        </section>
       </section>
 
       <section id="dictionary" class="view">
+        <section class="band">
+          <h2>词典构建概览</h2>
+          <div id="dictSummary" class="stats-grid"></div>
+        </section>
         <section class="band">
           <h2>词典分类</h2>
           <div id="dictGrid" class="dict-grid"></div>
