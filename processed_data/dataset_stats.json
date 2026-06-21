@@ -9,102 +9,16 @@
         "test": 492,
         "val": 246
       },
-      "labels": {
-        "0": 216,
-        "1": 806,
-        "2": 374,
-        "3": 1024,
-        "4": 37
-      },
+      "average_length": 115.28,
+      "min_length": 24,
+      "max_length": 229,
       "placeholders": {
         "_2DS_": 2662,
         "_3DS_": 720,
         "_SCM_": 180,
         "_r_": 63,
         "_SMM_": 1
-      },
-      "top_terms": [
-        {
-          "word": "CDFI",
-          "count": 4745
-        },
-        {
-          "word": "可见",
-          "count": 2873
-        },
-        {
-          "word": "_2DS_",
-          "count": 2662
-        },
-        {
-          "word": "甲状腺",
-          "count": 2596
-        },
-        {
-          "word": "腺体内",
-          "count": 2412
-        },
-        {
-          "word": "双侧颈部",
-          "count": 2240
-        },
-        {
-          "word": "未见明显肿大淋巴结",
-          "count": 2100
-        },
-        {
-          "word": "边界清晰",
-          "count": 1860
-        },
-        {
-          "word": "未见异常血流信号",
-          "count": 1840
-        },
-        {
-          "word": "大小形态如常",
-          "count": 1839
-        },
-        {
-          "word": "形态规整",
-          "count": 1838
-        },
-        {
-          "word": "右叶",
-          "count": 1679
-        },
-        {
-          "word": "左叶",
-          "count": 1616
-        },
-        {
-          "word": "腺体回声均匀",
-          "count": 1605
-        },
-        {
-          "word": "位于",
-          "count": 1419
-        },
-        {
-          "word": "血流信号",
-          "count": 991
-        },
-        {
-          "word": "未探及血流信号",
-          "count": 896
-        },
-        {
-          "word": "结节",
-          "count": 832
-        },
-        {
-          "word": "周边",
-          "count": 767
-        },
-        {
-          "word": "_3DS_",
-          "count": 720
-        }
-      ]
+      }
     },
     "mammary": {
       "name": "乳腺",
@@ -114,26 +28,9 @@
         "test": 703,
         "val": 352
       },
-      "labels": {
-        "0": 31,
-        "1": 951,
-        "2": 165,
-        "3": 214,
-        "4": 407,
-        "5": 163,
-        "6": 118,
-        "7": 114,
-        "8": 77,
-        "9": 320,
-        "10": 24,
-        "11": 120,
-        "12": 239,
-        "13": 42,
-        "14": 26,
-        "15": 102,
-        "16": 390,
-        "17": 10
-      },
+      "average_length": 100.06,
+      "min_length": 17,
+      "max_length": 253,
       "placeholders": {
         "_2DS_": 2648,
         "_SCM_": 2437,
@@ -141,89 +38,7 @@
         "_3DS_": 332,
         "_LocR_": 94,
         "_SMM_": 64
-      },
-      "top_terms": [
-        {
-          "word": "乳腺",
-          "count": 7936
-        },
-        {
-          "word": "双侧",
-          "count": 7451
-        },
-        {
-          "word": "结构",
-          "count": 3892
-        },
-        {
-          "word": "腋下",
-          "count": 3735
-        },
-        {
-          "word": "紊乱",
-          "count": 3248
-        },
-        {
-          "word": "腺体",
-          "count": 3181
-        },
-        {
-          "word": "可见",
-          "count": 2940
-        },
-        {
-          "word": "CDFI",
-          "count": 2908
-        },
-        {
-          "word": "扩张",
-          "count": 2792
-        },
-        {
-          "word": "_2DS_",
-          "count": 2648
-        },
-        {
-          "word": "乳导管",
-          "count": 2482
-        },
-        {
-          "word": "_SCM_",
-          "count": 2437
-        },
-        {
-          "word": "未见明显肿大淋巴结",
-          "count": 2272
-        },
-        {
-          "word": "左侧",
-          "count": 2132
-        },
-        {
-          "word": "右侧",
-          "count": 2126
-        },
-        {
-          "word": "乳头",
-          "count": 2068
-        },
-        {
-          "word": "_Loc_",
-          "count": 1936
-        },
-        {
-          "word": "边界清晰",
-          "count": 1914
-        },
-        {
-          "word": "未见明确占位性病变",
-          "count": 1900
-        },
-        {
-          "word": "形态规整",
-          "count": 1833
-        }
-      ]
+      }
     },
     "liver": {
       "name": "肝胆胰脾",
@@ -233,117 +48,20 @@
         "test": 279,
         "val": 140
       },
-      "labels": {
-        "0": 132,
-        "1": 356,
-        "2": 23,
-        "3": 58,
-        "4": 47,
-        "5": 61,
-        "6": 149,
-        "7": 71,
-        "8": 19,
-        "9": 24,
-        "10": 96,
-        "11": 37,
-        "12": 133,
-        "13": 66,
-        "14": 22,
-        "15": 50,
-        "16": 30,
-        "17": 20
-      },
+      "average_length": 161.95,
+      "min_length": 80,
+      "max_length": 236,
       "placeholders": {
         "_SCM_": 590,
         "_2DS_": 458,
         "_3DS_": 9,
         "_SMM_": 1
-      },
-      "top_terms": [
-        {
-          "word": "大小形态如常",
-          "count": 3956
-        },
-        {
-          "word": "回声均匀",
-          "count": 2726
-        },
-        {
-          "word": "实质",
-          "count": 2476
-        },
-        {
-          "word": "门静脉",
-          "count": 2248
-        },
-        {
-          "word": "胆管",
-          "count": 1600
-        },
-        {
-          "word": "扩张",
-          "count": 1562
-        },
-        {
-          "word": "肝脏",
-          "count": 1400
-        },
-        {
-          "word": "脾脏",
-          "count": 1395
-        },
-        {
-          "word": "胰腺",
-          "count": 1393
-        },
-        {
-          "word": "主干",
-          "count": 1385
-        },
-        {
-          "word": "胆囊",
-          "count": 1378
-        },
-        {
-          "word": "实质回声细密增强",
-          "count": 1362
-        },
-        {
-          "word": "未见明确占位性病变",
-          "count": 1354
-        },
-        {
-          "word": "占位性病变",
-          "count": 1262
-        },
-        {
-          "word": "饱满",
-          "count": 1247
-        },
-        {
-          "word": "壁不厚",
-          "count": 1215
-        },
-        {
-          "word": "内外",
-          "count": 1200
-        },
-        {
-          "word": "未见明显异常回声",
-          "count": 1090
-        },
-        {
-          "word": "范围",
-          "count": 1047
-        },
-        {
-          "word": "正常",
-          "count": 1009
-        }
-      ]
+      }
     }
   },
-  "dictionary_size": 301,
+  "dictionary_size": 814,
+  "stopword_count": 54,
+  "phrase_count": 145,
   "placeholder_map": {
     "_SMM_": "毫米数值",
     "_SCM_": "厘米数值",
@@ -352,5 +70,490 @@
     "_2DS_": "二维尺寸",
     "_3DS_": "三维尺寸",
     "_r_": "纵横比"
+  },
+  "segmentation_metrics": {
+    "sample_count": 30,
+    "overall": {
+      "jieba": {
+        "precision": 0.8246,
+        "recall": 0.9691,
+        "f1": 0.891,
+        "correct_boundaries": 94,
+        "predicted_boundaries": 114,
+        "gold_boundaries": 97
+      },
+      "forward": {
+        "precision": 0.7395,
+        "recall": 0.9072,
+        "f1": 0.8148,
+        "correct_boundaries": 88,
+        "predicted_boundaries": 119,
+        "gold_boundaries": 97
+      },
+      "reverse": {
+        "precision": 0.7692,
+        "recall": 0.9278,
+        "f1": 0.8411,
+        "correct_boundaries": 90,
+        "predicted_boundaries": 117,
+        "gold_boundaries": 97
+      }
+    },
+    "by_organ": {
+      "thyroid": {
+        "jieba": {
+          "precision": 0.8889,
+          "recall": 1.0,
+          "f1": 0.9412,
+          "correct_boundaries": 24,
+          "predicted_boundaries": 27,
+          "gold_boundaries": 24
+        },
+        "forward": {
+          "precision": 0.88,
+          "recall": 0.9167,
+          "f1": 0.898,
+          "correct_boundaries": 22,
+          "predicted_boundaries": 25,
+          "gold_boundaries": 24
+        },
+        "reverse": {
+          "precision": 1.0,
+          "recall": 0.9583,
+          "f1": 0.9787,
+          "correct_boundaries": 23,
+          "predicted_boundaries": 23,
+          "gold_boundaries": 24
+        }
+      },
+      "mammary": {
+        "jieba": {
+          "precision": 0.9091,
+          "recall": 0.9756,
+          "f1": 0.9412,
+          "correct_boundaries": 40,
+          "predicted_boundaries": 44,
+          "gold_boundaries": 41
+        },
+        "forward": {
+          "precision": 0.7451,
+          "recall": 0.9268,
+          "f1": 0.8261,
+          "correct_boundaries": 38,
+          "predicted_boundaries": 51,
+          "gold_boundaries": 41
+        },
+        "reverse": {
+          "precision": 0.7755,
+          "recall": 0.9268,
+          "f1": 0.8444,
+          "correct_boundaries": 38,
+          "predicted_boundaries": 49,
+          "gold_boundaries": 41
+        }
+      },
+      "liver": {
+        "jieba": {
+          "precision": 0.6977,
+          "recall": 0.9375,
+          "f1": 0.8,
+          "correct_boundaries": 30,
+          "predicted_boundaries": 43,
+          "gold_boundaries": 32
+        },
+        "forward": {
+          "precision": 0.6512,
+          "recall": 0.875,
+          "f1": 0.7467,
+          "correct_boundaries": 28,
+          "predicted_boundaries": 43,
+          "gold_boundaries": 32
+        },
+        "reverse": {
+          "precision": 0.6444,
+          "recall": 0.9062,
+          "f1": 0.7532,
+          "correct_boundaries": 29,
+          "predicted_boundaries": 45,
+          "gold_boundaries": 32
+        }
+      }
+    },
+    "error_examples": [
+      {
+        "organ": "liver",
+        "algorithm": "forward",
+        "text": "强回声后方伴声影，随体位改变而移动。",
+        "gold_tokens": [
+          "强回声",
+          "后方",
+          "声影",
+          "随体位改变",
+          "移动"
+        ],
+        "predicted_tokens": [
+          "强回声",
+          "后",
+          "方",
+          "伴",
+          "声影",
+          "随",
+          "体",
+          "而",
+          "移",
+          "动"
+        ],
+        "f1": 0.4615
+      },
+      {
+        "organ": "liver",
+        "algorithm": "reverse",
+        "text": "强回声后方伴声影，随体位改变而移动。",
+        "gold_tokens": [
+          "强回声",
+          "后方",
+          "声影",
+          "随体位改变",
+          "移动"
+        ],
+        "predicted_tokens": [
+          "强回声",
+          "后",
+          "方",
+          "伴",
+          "声影",
+          "随",
+          "体",
+          "而",
+          "移",
+          "动"
+        ],
+        "f1": 0.4615
+      },
+      {
+        "organ": "thyroid",
+        "algorithm": "forward",
+        "text": "右叶近峡部可见以囊性为主的囊实混合回声结节。",
+        "gold_tokens": [
+          "右叶近峡部",
+          "囊性为主的囊实混合回声结节"
+        ],
+        "predicted_tokens": [
+          "右叶近峡部",
+          "以囊性为主",
+          "的囊实混合回声",
+          "结节"
+        ],
+        "f1": 0.5
+      },
+      {
+        "organ": "liver",
+        "algorithm": "forward",
+        "text": "胆囊壁不厚，腔内可见多发强回声。",
+        "gold_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔内",
+          "多发",
+          "强回声"
+        ],
+        "predicted_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔",
+          "内可见多发强回声"
+        ],
+        "f1": 0.5714
+      },
+      {
+        "organ": "liver",
+        "algorithm": "reverse",
+        "text": "胆囊壁不厚，腔内可见多发强回声。",
+        "gold_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔内",
+          "多发",
+          "强回声"
+        ],
+        "predicted_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔",
+          "内可见多发强回声"
+        ],
+        "f1": 0.5714
+      },
+      {
+        "organ": "thyroid",
+        "algorithm": "forward",
+        "text": "右叶下极可见一低回声结节，大小约_2DS_。",
+        "gold_tokens": [
+          "右叶",
+          "下极",
+          "低回声结节",
+          "_2DS_"
+        ],
+        "predicted_tokens": [
+          "右叶",
+          "下极可见一低回声",
+          "结节",
+          "_2DS_"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "thyroid",
+        "algorithm": "jieba",
+        "text": "左叶中下部可见囊实混合回声结节。",
+        "gold_tokens": [
+          "左叶中下部",
+          "囊实混合回声结节"
+        ],
+        "predicted_tokens": [
+          "左叶中下部",
+          "可见",
+          "囊实混合回声结节"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "thyroid",
+        "algorithm": "jieba",
+        "text": "右叶近峡部可见以囊性为主的囊实混合回声结节。",
+        "gold_tokens": [
+          "右叶近峡部",
+          "囊性为主的囊实混合回声结节"
+        ],
+        "predicted_tokens": [
+          "右叶近峡部",
+          "可见",
+          "囊性为主的囊实混合回声结节"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "mammary",
+        "algorithm": "forward",
+        "text": "双侧乳头后方均未探及腺体样结构。",
+        "gold_tokens": [
+          "双侧",
+          "乳头",
+          "后方",
+          "探及",
+          "腺体",
+          "结构"
+        ],
+        "predicted_tokens": [
+          "双侧",
+          "乳头",
+          "后",
+          "方",
+          "探",
+          "腺体",
+          "结",
+          "构"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "mammary",
+        "algorithm": "reverse",
+        "text": "双侧乳头后方均未探及腺体样结构。",
+        "gold_tokens": [
+          "双侧",
+          "乳头",
+          "后方",
+          "探及",
+          "腺体",
+          "结构"
+        ],
+        "predicted_tokens": [
+          "双侧",
+          "乳头",
+          "后",
+          "方",
+          "探",
+          "腺体",
+          "结",
+          "构"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "mammary",
+        "algorithm": "forward",
+        "text": "乳腺导管扩张，腺体内回声不均匀。",
+        "gold_tokens": [
+          "乳腺",
+          "导管",
+          "扩张",
+          "腺体内",
+          "回声不均匀"
+        ],
+        "predicted_tokens": [
+          "乳腺",
+          "导",
+          "管",
+          "扩",
+          "张",
+          "腺体内回声不均匀"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "mammary",
+        "algorithm": "reverse",
+        "text": "乳腺导管扩张，腺体内回声不均匀。",
+        "gold_tokens": [
+          "乳腺",
+          "导管",
+          "扩张",
+          "腺体内",
+          "回声不均匀"
+        ],
+        "predicted_tokens": [
+          "乳腺",
+          "导",
+          "管",
+          "扩",
+          "张",
+          "腺体内回声不均匀"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "mammary",
+        "algorithm": "forward",
+        "text": "双侧乳腺可见多个无回声结节。",
+        "gold_tokens": [
+          "双侧",
+          "乳腺",
+          "多个",
+          "无回声结节"
+        ],
+        "predicted_tokens": [
+          "双侧",
+          "乳腺",
+          "可见多个无回声",
+          "结节"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "liver",
+        "algorithm": "jieba",
+        "text": "胆囊壁不厚，腔内可见多发强回声。",
+        "gold_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔内",
+          "多发",
+          "强回声"
+        ],
+        "predicted_tokens": [
+          "胆囊",
+          "壁不厚",
+          "腔",
+          "可见",
+          "多发",
+          "强回声"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "liver",
+        "algorithm": "jieba",
+        "text": "强回声后方伴声影，随体位改变而移动。",
+        "gold_tokens": [
+          "强回声",
+          "后方",
+          "声影",
+          "随体位改变",
+          "移动"
+        ],
+        "predicted_tokens": [
+          "强回声",
+          "后方",
+          "伴",
+          "声影",
+          "随",
+          "体位",
+          "改变",
+          "而",
+          "移动"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "liver",
+        "algorithm": "jieba",
+        "text": "胆囊切除术后，肝外胆管宽约_SCM_。",
+        "gold_tokens": [
+          "胆囊",
+          "切除术后",
+          "肝外胆管",
+          "宽",
+          "_SCM_"
+        ],
+        "predicted_tokens": [
+          "胆囊",
+          "切除术后",
+          "肝外",
+          "胆管",
+          "宽约",
+          "_SCM_"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "liver",
+        "algorithm": "forward",
+        "text": "因腹腔肠气干扰严重，图像显示欠清晰。",
+        "gold_tokens": [
+          "腹腔",
+          "肠气干扰",
+          "严重",
+          "图像",
+          "显示欠清晰"
+        ],
+        "predicted_tokens": [
+          "因",
+          "腹",
+          "腔",
+          "肠气干扰",
+          "严",
+          "重",
+          "图",
+          "像",
+          "显示欠清晰"
+        ],
+        "f1": 0.6667
+      },
+      {
+        "organ": "liver",
+        "algorithm": "reverse",
+        "text": "因腹腔肠气干扰严重，图像显示欠清晰。",
+        "gold_tokens": [
+          "腹腔",
+          "肠气干扰",
+          "严重",
+          "图像",
+          "显示欠清晰"
+        ],
+        "predicted_tokens": [
+          "因",
+          "腹",
+          "腔",
+          "肠气干扰",
+          "严",
+          "重",
+          "图",
+          "像",
+          "显示欠清晰"
+        ],
+        "f1": 0.6667
+      }
+    ]
   }
 }

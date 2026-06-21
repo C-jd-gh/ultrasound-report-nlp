@@ -1,9 +1,2 @@
 Flask>=3.0,<4.0
 jieba>=0.42,<0.43
-gensim>=4.3,<5.0
-networkx>=3.0,<4.0
-numpy
-pandas
-scipy
-scikit-learn
-sklearn-crfsuite>=0.5,<1.0

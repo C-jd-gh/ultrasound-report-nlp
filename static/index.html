@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>超声报告 NLP 小型系统</title>
+    <title>超声报告中文分词系统</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <header class="topbar">
       <div>
-        <h1>超声报告 NLP 小型系统</h1>
-        <p>分词、词典、关键词、规则抽取、实体识别、规范化与模板生成</p>
+        <h1>超声报告中文分词系统</h1>
+        <p>医学词典增强、停用词过滤、Jieba、正向最大匹配与逆向最大匹配</p>
       </div>
       <nav class="tabs" aria-label="页面视图">
-        <button class="tab active" data-view="analysis">报告分析</button>
-        <button class="tab" data-view="stats">统计概览</button>
+        <button class="tab active" data-view="analysis">报告分词</button>
+        <button class="tab" data-view="evaluation">分词评测</button>
         <button class="tab" data-view="dictionary">词典构建</button>
       </nav>
     </header>
@@ -37,39 +37,60 @@
             </div>
 
             <div class="sample-meta" id="sampleMeta">等待载入样本</div>
-
             <label for="reportText">报告文本</label>
             <textarea id="reportText" spellcheck="false"></textarea>
-
-            <button id="analyzeBtn" class="primary">开始分析</button>
+            <button id="analyzeBtn" class="primary">开始分词</button>
           </aside>
 
           <section class="results">
             <div class="summary-strip">
-              <div><span id="tokenCount">0</span><small>分词数</small></div>
-              <div><span id="entityCount">0</span><small>实体数</small></div>
-              <div><span id="ruleCount">0</span><small>规则命中</small></div>
-              <div><span id="qualityCount">0</span><small>质控提示</small></div>
+              <div><span id="jiebaCount">0</span><small>Jieba 词数</small></div>
+              <div><span id="medicalCount">0</span><small>医学词数</small></div>
+              <div><span id="placeholderCount">0</span><small>占位符</small></div>
+              <div><span id="differenceCount">0</span><small>边界差异</small></div>
             </div>
 
             <section class="band">
-              <h2>标签预测</h2>
-              <div id="predictionPanel" class="prediction-panel"></div>
+              <h2>清洗后文本</h2>
+              <pre id="cleanedText"></pre>
+            </section>
+
+            <section class="band segmentation-band">
+              <div class="band-heading">
+                <h2>Jieba + 医学词典</h2>
+                <span id="jiebaMeta"></span>
+              </div>
+              <div id="jiebaTokens" class="chips"></div>
+            </section>
+
+            <section class="band two-col">
+              <div>
+                <div class="band-heading">
+                  <h2>正向最大匹配 FMM</h2>
+                  <span id="forwardMeta"></span>
+                </div>
+                <div id="forwardTokens" class="chips"></div>
+              </div>
+              <div>
+                <div class="band-heading">
+                  <h2>逆向最大匹配 RMM</h2>
+                  <span id="reverseMeta"></span>
+                </div>
+                <div id="reverseTokens" class="chips"></div>
+              </div>
             </section>
 
             <section class="band">
-              <h2>征象倾向提示</h2>
-              <div id="riskPanel" class="prediction-panel"></div>
-            </section>
-
-            <section class="band">
-              <h2>聚类结果</h2>
-              <div id="clusterPanel" class="prediction-panel"></div>
-            </section>
-
-            <section class="band">
-              <h2>分词结果</h2>
-              <div id="tokens" class="chips"></div>
+              <h2>算法边界对比</h2>
+              <div id="agreementGrid" class="metric-grid"></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>位置</th><th>上下文</th><th>产生该边界的算法</th></tr>
+                  </thead>
+                  <tbody id="differenceRows"></tbody>
+                </table>
+              </div>
             </section>
 
             <section class="band">
@@ -79,128 +100,34 @@
 
             <section class="band two-col">
               <div>
-                <h2>TF-IDF 关键词</h2>
-                <div id="tfidfKeywords" class="rank-list"></div>
+                <h2>未登录词候选</h2>
+                <div id="unknownWords" class="chips"></div>
               </div>
               <div>
-                <h2>词频关键词</h2>
-                <div id="freqKeywords" class="rank-list"></div>
+                <h2>测量占位符</h2>
+                <div id="placeholders" class="chips"></div>
               </div>
-            </section>
-
-            <section class="band">
-              <h2>TextRank 关键词</h2>
-              <div id="textrankKeywords" class="rank-list"></div>
-            </section>
-
-            <section class="band">
-              <h2>正则匹配与解释</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>类型</th>
-                      <th>命中内容</th>
-                      <th>位置</th>
-                      <th>规则</th>
-                    </tr>
-                  </thead>
-                  <tbody id="regexRows"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="band">
-              <h2>实体识别</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>类型</th>
-                      <th>名称</th>
-                      <th>值</th>
-                      <th>来源</th>
-                    </tr>
-                  </thead>
-                  <tbody id="entityRows"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="band">
-              <h2>CRF 序列实体识别</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>类型</th>
-                      <th>实体</th>
-                      <th>位置</th>
-                      <th>来源</th>
-                    </tr>
-                  </thead>
-                  <tbody id="sequenceRows"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="band">
-              <h2>病灶-器官关系抽取</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>主体</th>
-                      <th>关系</th>
-                      <th>病灶</th>
-                      <th>属性</th>
-                    </tr>
-                  </thead>
-                  <tbody id="relationRows"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="band two-col">
-              <div>
-                <h2>文本规范化</h2>
-                <pre id="normalizedText"></pre>
-              </div>
-              <div>
-                <h2>模板生成</h2>
-                <pre id="templateReport"></pre>
-              </div>
-            </section>
-
-            <section class="band">
-              <h2>报告质量检查</h2>
-              <div id="qualityList" class="quality-list"></div>
-            </section>
-
-            <section class="band">
-              <h2>相似报告检索</h2>
-              <div id="similarList" class="similar-list"></div>
             </section>
           </section>
         </div>
       </section>
 
-      <section id="stats" class="view">
+      <section id="evaluation" class="view">
+        <section class="band">
+          <h2>人工金标准评测</h2>
+          <div id="evaluationSummary" class="stats-grid"></div>
+        </section>
+        <section class="band">
+          <h2>按报告类型评测</h2>
+          <div id="organMetrics" class="stats-grid"></div>
+        </section>
+        <section class="band">
+          <h2>典型分词错误</h2>
+          <div id="errorExamples" class="error-list"></div>
+        </section>
         <section class="band">
           <h2>数据集概览</h2>
-          <div id="statsGrid" class="stats-grid"></div>
-        </section>
-        <section class="band">
-          <h2>分类模型评估</h2>
-          <div id="modelMetrics" class="metrics-grid"></div>
-        </section>
-        <section class="band">
-          <h2>CRF 实体模型评估</h2>
-          <div id="nerMetrics" class="metrics-grid"></div>
-        </section>
-        <section class="band">
-          <h2>报告聚类分析</h2>
-          <div id="vectorMetrics" class="metrics-grid"></div>
+          <div id="datasetStats" class="stats-grid"></div>
         </section>
       </section>
 
@@ -210,7 +137,15 @@
           <div id="dictSummary" class="stats-grid"></div>
         </section>
         <section class="band">
-          <h2>词典分类</h2>
+          <h2>停用词</h2>
+          <div id="stopwords" class="dict-terms"></div>
+        </section>
+        <section class="band">
+          <h2>优先保护医学短语</h2>
+          <div id="protectedPhrases" class="dict-terms"></div>
+        </section>
+        <section class="band">
+          <h2>医学词典分类</h2>
           <div id="dictGrid" class="dict-grid"></div>
         </section>
       </section>

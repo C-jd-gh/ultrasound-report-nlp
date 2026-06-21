@@ -1,185 +1,123 @@
 import unittest
 
+from app import app
 from ultrasound_nlp.nlp_pipeline import (
     analyze_report,
-    cluster_for_report,
+    build_dictionary,
     dataset_stats,
-    extract_entities,
-    extract_regex_matches,
+    dictionary_view,
+    evaluate_segmentation,
+    forward_max_match,
+    jieba_tokenize,
     load_corpus,
-    model_metrics,
-    nearest_vector_terms,
-    ner_metrics,
-    normalize_text,
-    pos_tag_text,
-    predict_label,
-    risk_tendency,
+    load_gold_samples,
+    load_stopwords,
+    reverse_max_match,
     sample_report,
-    tokenize,
-    vector_model_metrics,
+    segmentation_score,
 )
-from ultrasound_nlp.relation_extractor import extract_relations
-from ultrasound_nlp.vector_models import textrank_keywords
 
 
-class PipelineTest(unittest.TestCase):
-    def test_loads_all_datasets(self):
+class SegmentationPipelineTest(unittest.TestCase):
+    def test_loads_all_datasets_without_using_labels(self):
         records = load_corpus()
         stats = dataset_stats()
-        self.assertGreater(len(records), 0)
-        self.assertIn("thyroid", stats["organs"])
-        self.assertIn("mammary", stats["organs"])
-        self.assertIn("liver", stats["organs"])
-        self.assertGreater(stats["organs"]["thyroid"]["splits"]["train"], 0)
+        self.assertEqual(len(records), 7364)
+        self.assertEqual(stats["organs"]["thyroid"]["total"], 2457)
+        self.assertFalse(hasattr(records[0], "label"))
 
-    def test_segmentation_keeps_medical_terms(self):
-        text = "右叶可见一低回声结节，边界清晰，形态规整，CDFI示未探及血流信号。"
-        tokens = tokenize(text)
+    def test_medical_phrases_are_kept(self):
+        text = (
+            "右叶近峡部可见以囊性为主的囊实混合回声结节，"
+            "CDFI示周边及内部可探及血流信号。"
+        )
+        tokens = jieba_tokenize(text)
+        self.assertIn("右叶近峡部", tokens)
+        self.assertIn("囊性为主的囊实混合回声结节", tokens)
+        self.assertIn("周边及内部可探及血流信号", tokens)
+
+    def test_postoperative_and_lymph_phrases_are_kept(self):
+        text = "甲状腺全切术后，双侧颈部未见异常肿大淋巴结。"
+        tokens = jieba_tokenize(text)
+        self.assertIn("甲状腺全切术后", tokens)
+        self.assertIn("双侧颈部", tokens)
+        self.assertIn("未见异常肿大淋巴结", tokens)
+
+    def test_placeholders_are_atomic(self):
+        text = "左叶大小为_3DS_，峡部_SCM_，结节大小约_2DS_。"
+        for algorithm in (jieba_tokenize, forward_max_match, reverse_max_match):
+            tokens = algorithm(text)
+            self.assertIn("_3DS_", tokens)
+            self.assertIn("_SCM_", tokens)
+            self.assertIn("_2DS_", tokens)
+
+    def test_stopwords_and_punctuation_are_filtered(self):
+        tokens = jieba_tokenize("于右叶可见一低回声结节，大小约_2DS_。")
+        for stopword in ("于", "可", "见", "一", "大小", "约"):
+            self.assertNotIn(stopword, tokens)
         self.assertIn("低回声结节", tokens)
-        self.assertIn("边界清晰", tokens)
-        self.assertIn("CDFI", tokens)
-        self.assertNotIn("CD", tokens)
-        self.assertNotIn("FI示腺体内", tokens)
 
-    def test_jieba_mode_keeps_medical_terms(self):
-        text = "甲状腺全切术后，原区域未见明确占位性病变。双侧颈部未见异常肿大淋巴结。"
-        tokens = tokenize(text, mode="jieba")
-        self.assertIn("甲状腺全切术后", tokens)
-        self.assertIn("原区域", tokens)
-        self.assertIn("未见明确占位性病变", tokens)
-        self.assertIn("双侧颈部", tokens)
-        self.assertIn("未见异常肿大淋巴结", tokens)
+    def test_three_algorithms_return_stable_results(self):
+        text = "左叶中下部可见低回声结节，边界清晰。"
+        for algorithm in (jieba_tokenize, forward_max_match, reverse_max_match):
+            result = algorithm(text)
+            self.assertIsInstance(result, list)
+            self.assertGreater(len(result), 0)
 
-    def test_segmentation_avoids_noisy_dynamic_words(self):
-        text = "甲状腺大小形态如常，于左叶腺体内可见多发结节，大者位于上极，呈囊实混合回声，大小约_2DS_。"
-        tokens = tokenize(text)
-        self.assertIn("甲状腺", tokens)
-        self.assertIn("大小形态如常", tokens)
-        self.assertIn("多发结节", tokens)
-        self.assertIn("囊实混合回声", tokens)
-        self.assertIn("_2DS_", tokens)
-        self.assertNotIn("左叶腺体内可", tokens)
-        self.assertNotIn("大", tokens)
-        self.assertNotIn("小", tokens)
-        self.assertNotIn("者", tokens)
-        self.assertNotIn("位", tokens)
+    def test_analyze_contract(self):
+        result = analyze_report("右叶可见低回声结节，大小约_2DS_。", "thyroid")
+        expected = {
+            "original", "cleaned", "jieba_tokens", "forward_tokens",
+            "reverse_tokens", "pos_tags", "comparison", "token_stats",
+        }
+        self.assertTrue(expected.issubset(result))
+        self.assertIn("pairwise_agreement", result["comparison"])
 
-    def test_segmentation_keeps_negation_phrases(self):
-        text = "未见明确占位性病变。双侧颈部未见明显肿大淋巴结。"
-        tokens = tokenize(text)
-        self.assertIn("未见明确占位性病变", tokens)
-        self.assertIn("未见明显肿大淋巴结", tokens)
+    def test_segmentation_metric_math(self):
+        score = segmentation_score(
+            "甲状腺低回声结节",
+            ["甲状腺", "低回声结节"],
+            ["甲状腺", "低回声结节"],
+        )
+        self.assertEqual(score["precision"], 1.0)
+        self.assertEqual(score["recall"], 1.0)
+        self.assertEqual(score["f1"], 1.0)
 
-    def test_segmentation_handles_postoperative_report(self):
-        text = "甲状腺全切术后，原区域未见明确占位性病变。双侧颈部未见异常肿大淋巴结。"
-        tokens = tokenize(text)
-        self.assertIn("甲状腺全切术后", tokens)
-        self.assertIn("原区域", tokens)
-        self.assertIn("未见明确占位性病变", tokens)
-        self.assertIn("双侧颈部", tokens)
-        self.assertIn("未见异常肿大淋巴结", tokens)
-        self.assertNotIn("原", tokens)
-        self.assertNotIn("区", tokens)
-        self.assertNotIn("域", tokens)
-        self.assertNotIn("结", tokens)
+    def test_gold_dataset_and_evaluation(self):
+        samples = load_gold_samples()
+        metrics = evaluate_segmentation()
+        self.assertEqual(len(samples), 30)
+        self.assertEqual(metrics["sample_count"], 30)
+        for algorithm in ("jieba", "forward", "reverse"):
+            self.assertIn(algorithm, metrics["overall"])
+            self.assertGreaterEqual(metrics["overall"][algorithm]["f1"], 0)
+            self.assertLessEqual(metrics["overall"][algorithm]["f1"], 1)
 
-    def test_segmentation_handles_diffuse_thyroid_report(self):
-        text = "甲状腺体积正常，形态欠规则，腺体内回声增粗、增强，不均匀，部分可见条索样改变，腺体内未见明确占位性病变，CDFI示腺体内血流信号未见明显异常。"
-        tokens = tokenize(text)
-        self.assertIn("甲状腺体积正常", tokens)
-        self.assertIn("形态欠规则", tokens)
-        self.assertIn("腺体内回声增粗", tokens)
-        self.assertIn("增强", tokens)
-        self.assertIn("不均匀", tokens)
-        self.assertIn("部分可见条索样改变", tokens)
-        self.assertIn("未见明确占位性病变", tokens)
-        self.assertIn("CDFI", tokens)
-        self.assertIn("腺体内血流信号", tokens)
-        self.assertIn("未见明显异常", tokens)
-        for noisy in ["正", "常", "不", "均", "匀", "条", "索", "样", "改", "变", "显", "异"]:
-            self.assertNotIn(noisy, tokens)
+    def test_dictionary_contract(self):
+        data = dictionary_view()
+        self.assertGreater(len(build_dictionary()), 0)
+        self.assertGreater(len(load_stopwords()), 0)
+        self.assertIn("protected_phrases", data)
+        self.assertIn("categories", data)
 
-    def test_regex_extracts_core_fields(self):
-        text = "左叶中部可见一低回声结节，大小约_2DS_，边界清晰，CDFI示可探及血流信号。"
-        matches = extract_regex_matches(text)
-        values = [item["value"] for item in matches]
-        self.assertIn("_2DS_", values)
-        self.assertTrue(any("左叶" in value for value in values))
-        self.assertTrue(any("CDFI" in value for value in values))
+    def test_sample_does_not_expose_label(self):
+        sample = sample_report("mammary", 0)
+        self.assertNotIn("label", sample)
+        self.assertIn("finding", sample)
 
-    def test_entities_include_lesion_event(self):
-        text = "左叶中部可见一低回声结节，大小约_2DS_，边界清晰，形态规整，CDFI示未探及血流信号。"
-        entities = extract_entities(text, "thyroid")
-        lesion_events = [item for item in entities if item["type"] == "lesion_event"]
-        self.assertGreaterEqual(len(lesion_events), 1)
-        self.assertEqual(lesion_events[0]["attributes"]["size"], "_2DS_")
-
-    def test_normalization_and_template(self):
-        text = "边界清楚，形态规则，CDFI示未探及血流信号。"
-        normalized = normalize_text(text)
-        self.assertIn("边界清晰", normalized)
-        self.assertIn("形态规整", normalized)
-        self.assertIn("未见血流信号", normalized)
-
-    def test_analyze_sample_report(self):
-        sample = sample_report("liver")
-        result = analyze_report(sample["finding"], "liver")
-        self.assertIn("tokens", result)
-        self.assertIn("pos_tags", result)
-        self.assertIn("keywords_textrank", result)
-        self.assertIn("sequence_entities", result)
-        self.assertIn("relations", result)
-        self.assertIn("risk_tendency", result)
-        self.assertIn("cluster", result)
-        self.assertIn("prediction", result)
-        self.assertIn("template_report", result)
-        self.assertGreater(len(result["tokens"]), 0)
-
-    def test_pos_tags_contract(self):
-        tags = pos_tag_text("甲状腺右叶见低回声结节，边界清晰。")
-        self.assertGreater(len(tags), 0)
-        self.assertIn("word", tags[0])
-        self.assertIn("pos", tags[0])
-        self.assertIn("is_medical_term", tags[0])
-
-    def test_textrank_keywords_contract(self):
-        keywords = textrank_keywords("甲状腺右叶见低回声结节，边界清晰，形态规整。")
-        self.assertGreater(len(keywords), 0)
-        self.assertIn("word", keywords[0])
-        self.assertIn("score", keywords[0])
-
-    def test_relation_extraction_contract(self):
-        relations = extract_relations("甲状腺右叶见低回声结节，大小约_2DS_，CDFI示未探及血流信号。")
-        self.assertGreaterEqual(len(relations), 1)
-        self.assertIn("subject", relations[0])
-        self.assertIn("object", relations[0])
-
-    def test_risk_tendency_contract(self):
-        result = risk_tendency("结节形态欠规整，边界欠清晰，可见微小钙化。")
-        self.assertIn("level", result)
-        self.assertIn("suspicious_evidence", result)
-        self.assertGreater(len(result["suspicious_evidence"]), 0)
-
-    def test_prediction_contract(self):
-        result = predict_label("甲状腺大小形态如常，未见明确占位性病变。", "thyroid")
-        self.assertIn("model_ready", result)
-        self.assertIn("predicted_label", result)
-        self.assertIn("top_labels", result)
-
-    def test_model_metrics_contract(self):
-        result = model_metrics()
-        self.assertIn("model_ready", result)
-        self.assertIn("organs", result)
-
-    def test_new_model_metric_contracts(self):
-        self.assertIn("model_ready", ner_metrics())
-        self.assertIn("model_ready", vector_model_metrics())
-
-    def test_cluster_and_vector_contracts(self):
-        cluster = cluster_for_report("甲状腺右叶见低回声结节。", "thyroid")
-        nearest = nearest_vector_terms("结节")
-        self.assertIn("model_ready", cluster)
-        self.assertIn("model_ready", nearest)
+    def test_removed_model_endpoints_return_404(self):
+        client = app.test_client()
+        for path in (
+            "/api/predict",
+            "/api/model/metrics",
+            "/api/ner/metrics",
+            "/api/vector/metrics",
+            "/api/cluster",
+            "/api/vector/nearest",
+            "/api/similar",
+        ):
+            response = client.get(path)
+            self.assertEqual(response.status_code, 404, path)
 
 
 if __name__ == "__main__":
