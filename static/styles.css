@@ -129,6 +129,81 @@ textarea { min-height: 280px; padding: 12px; resize: vertical; line-height: 1.65
 .chip.medical { color: #134e4a; background: #e7f5f4; border-color: #b8d9d5; }
 .empty-text { color: var(--muted); font-size: 13px; }
 
+.wordcloud-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.wordcloud-summary > strong {
+  flex: 0 0 auto;
+  color: var(--accent-dark);
+  font-size: 14px;
+}
+
+.wordcloud-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wordcloud-terms span {
+  padding: 4px 7px;
+  color: #31424d;
+  background: var(--soft);
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.wordcloud-terms small {
+  color: var(--muted);
+}
+
+.wordcloud-status {
+  min-height: 20px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.wordcloud-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 10 / 3;
+  max-height: 360px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.wordcloud-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wordcloud-placeholder {
+  padding: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.wordcloud-frame.has-error {
+  min-height: 120px;
+  background: #fffafa;
+  border-color: #e7c7cc;
+}
+
+.wordcloud-frame.has-error .wordcloud-placeholder {
+  color: #8a3441;
+}
+
 .pos-item {
   display: inline-grid;
   gap: 2px;
@@ -208,4 +283,6 @@ th { color: #31424d; background: var(--soft); }
   .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .tab { padding: 0 8px; font-size: 13px; }
   .summary-strip, .metric-grid { grid-template-columns: 1fr; }
+  .wordcloud-summary { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .wordcloud-frame { aspect-ratio: 16 / 7; max-height: 240px; }
 }

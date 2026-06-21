@@ -1,4 +1,7 @@
 import unittest
+from io import BytesIO
+
+from PIL import Image
 
 from app import app
 from ultrasound_nlp.nlp_pipeline import (
@@ -15,6 +18,8 @@ from ultrasound_nlp.nlp_pipeline import (
     reverse_max_match,
     sample_report,
     segmentation_score,
+    generate_wordcloud_png,
+    wordcloud_frequencies,
 )
 
 
@@ -104,6 +109,57 @@ class SegmentationPipelineTest(unittest.TestCase):
         sample = sample_report("mammary", 0)
         self.assertNotIn("label", sample)
         self.assertIn("finding", sample)
+
+    def test_wordcloud_frequency_filter(self):
+        frequencies = wordcloud_frequencies(
+            "低回声结节，低回声结节，CDFI示未探及血流信号，"
+            "大小约_2DS_，周边及内部可探及血流信号。"
+        )
+        self.assertIn("低回声结节", frequencies)
+        self.assertIn("CDFI", frequencies)
+        self.assertIn("血流信号", frequencies)
+        self.assertNotIn("_2DS_", frequencies)
+        self.assertNotIn("约", frequencies)
+        self.assertNotIn("周边", frequencies)
+        self.assertNotIn("内部", frequencies)
+        self.assertNotIn("可见", frequencies)
+        self.assertGreater(frequencies["低回声结节"], frequencies["CDFI"])
+
+    def test_wordcloud_aliases_and_word_limit(self):
+        frequencies = wordcloud_frequencies(
+            "囊性为主的囊实混合回声结节，周边及内部可探及血流信号，"
+            "双侧颈部未见明显肿大淋巴结。"
+        )
+        self.assertIn("囊实混合回声结节", frequencies)
+        self.assertIn("血流信号", frequencies)
+        self.assertIn("淋巴结未见肿大", frequencies)
+        self.assertNotIn("囊性为主的囊实混合回声结节", frequencies)
+        self.assertNotIn("未见明显肿大淋巴结", frequencies)
+        self.assertLessEqual(len(frequencies), 30)
+
+    def test_wordcloud_png_generation(self):
+        image = generate_wordcloud_png("甲状腺右叶可见低回声结节，边界清晰。")
+        self.assertTrue(image.startswith(b"\x89PNG\r\n\x1a\n"))
+        with Image.open(BytesIO(image)) as rendered:
+            self.assertEqual(rendered.size, (1200, 360))
+
+    def test_wordcloud_endpoint(self):
+        client = app.test_client()
+        response = client.post(
+            "/api/wordcloud",
+            json={"organ": "thyroid", "text": "甲状腺右叶可见低回声结节。"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, "image/png")
+        self.assertTrue(response.data.startswith(b"\x89PNG\r\n\x1a\n"))
+
+    def test_wordcloud_endpoint_rejects_empty_content(self):
+        client = app.test_client()
+        self.assertEqual(client.post("/api/wordcloud", json={"text": ""}).status_code, 400)
+        self.assertEqual(
+            client.post("/api/wordcloud", json={"text": "_2DS_，于一。"}).status_code,
+            400,
+        )
 
     def test_removed_model_endpoints_return_404(self):
         client = app.test_client()

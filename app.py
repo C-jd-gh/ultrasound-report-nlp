@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 from pathlib import Path
+from io import BytesIO
+import socket
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_file, send_from_directory
 
 from ultrasound_nlp.nlp_pipeline import (
     ORGAN_CONFIG,
     analyze_report,
     dataset_stats,
     dictionary_view,
+    generate_wordcloud_png,
     sample_report,
 )
 
@@ -55,12 +58,36 @@ def dictionary():
     return jsonify(dictionary_view())
 
 
+@app.post("/api/wordcloud")
+def wordcloud():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", "")).strip()
+    if not text:
+        return jsonify({"error": "报告文本不能为空。"}), 400
+    try:
+        image = generate_wordcloud_png(text)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    return send_file(
+        BytesIO(image),
+        mimetype="image/png",
+        download_name="report-wordcloud.png",
+        max_age=0,
+    )
+
+
 @app.errorhandler(404)
 def not_found(_error):
     return jsonify({"error": "not found"}), 404
 
 
 def run(host: str = "127.0.0.1", port: int = 8000, debug: bool = False) -> None:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.settimeout(0.3)
+        if probe.connect_ex((host, port)) == 0:
+            raise SystemExit(
+                f"端口 {port} 已有服务运行，请先关闭旧终端中的 python app.py。"
+            )
     app.run(host=host, port=port, debug=debug)
 
 

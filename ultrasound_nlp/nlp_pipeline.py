@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import math
 import re
+from io import BytesIO
 from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
@@ -10,6 +12,7 @@ from typing import Any
 
 import jieba
 import jieba.posseg as pseg
+from wordcloud import WordCloud
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -19,6 +22,11 @@ RESOURCES_DIR = BASE_DIR / "resources"
 JIEBA_USER_DICT_PATH = PROCESSED_DATA_DIR / "medical_jieba_userdict.txt"
 GOLD_DATA_PATH = RESOURCES_DIR / "segmentation_gold.json"
 SEGMENTATION_METRICS_PATH = PROCESSED_DATA_DIR / "segmentation_metrics.json"
+WORDCLOUD_FONT_CANDIDATES = (
+    Path(r"C:\Windows\Fonts\msyh.ttc"),
+    Path(r"C:\Windows\Fonts\simhei.ttf"),
+    Path(r"C:\Windows\Fonts\simsun.ttc"),
+)
 
 
 ORGAN_CONFIG = {
@@ -143,6 +151,25 @@ def load_medical_phrases() -> tuple[str, ...]:
         phrases.update(values)
     phrases.update(PLACEHOLDER_MAP)
     return tuple(sorted(phrases, key=lambda item: (-len(item), item)))
+
+
+@lru_cache(maxsize=1)
+def load_wordcloud_stopwords() -> frozenset[str]:
+    return frozenset(_read_lines(RESOURCES_DIR / "wordcloud_stopwords.txt"))
+
+
+@lru_cache(maxsize=1)
+def load_wordcloud_aliases() -> tuple[tuple[str, str], ...]:
+    path = RESOURCES_DIR / "wordcloud_aliases.json"
+    if not path.exists():
+        return ()
+    aliases = json.loads(path.read_text(encoding="utf-8-sig"))
+    return tuple(
+        sorted(
+            ((str(source), str(target)) for source, target in aliases.items()),
+            key=lambda item: (-len(item[0]), item[0]),
+        )
+    )
 
 
 def _repair_mojibake(text: str) -> str:
@@ -492,7 +519,146 @@ def analyze_report(text: str, organ: str = "thyroid") -> dict[str, Any]:
             "placeholders": placeholders,
             "unknown_words": unknown_words,
         },
+        "wordcloud_summary": wordcloud_summary(cleaned),
     }
+
+
+def _wordcloud_tokens(text: str) -> list[str]:
+    normalized = clean_text(text)
+    aliases = load_wordcloud_aliases()
+    for source, target in aliases:
+        normalized = normalized.replace(source, target)
+    target_map: dict[str, str] = {}
+    targets = sorted({target for _, target in aliases}, key=lambda item: (-len(item), item))
+    for index, target in enumerate(targets):
+        if target not in normalized:
+            continue
+        marker = f"WCALIAS{chr(ord('A') + index)}END"
+        normalized = normalized.replace(target, marker)
+        target_map[marker] = target
+    return [target_map.get(token, token) for token in jieba_tokenize(normalized)]
+
+
+@lru_cache(maxsize=1)
+def _wordcloud_term_categories() -> dict[str, str]:
+    return {
+        term: category
+        for category, terms in DOMAIN_TERMS.items()
+        for term in terms
+    }
+
+
+def wordcloud_frequencies(text: str, max_words: int = 30) -> dict[str, float]:
+    tokens = _wordcloud_tokens(text)
+    dictionary = set(build_dictionary())
+    alias_targets = {target for _, target in load_wordcloud_aliases()}
+    stopwords = load_wordcloud_stopwords()
+    actual_counts: Counter[str] = Counter()
+    for token in tokens:
+        if (
+            len(token) <= 1
+            or token in stopwords
+            or token.isdigit()
+            or PLACEHOLDER_PATTERN.fullmatch(token)
+        ):
+            continue
+        if token.isascii() and token not in dictionary:
+            continue
+        actual_counts[token] += 1
+    categories = _wordcloud_term_categories()
+    category_boost = {
+        "organ": 1.12,
+        "lesion": 1.24,
+        "echo": 1.16,
+        "blood": 1.12,
+        "boundary": 1.08,
+        "shape": 1.08,
+        "status": 1.04,
+        "location": 1.02,
+    }
+    weighted: dict[str, float] = {}
+    for token, count in actual_counts.items():
+        if token not in dictionary and token not in alias_targets and count < 2:
+            continue
+        boost = category_boost.get(categories.get(token, ""), 1.08 if token in alias_targets else 1.0)
+        if token == "CDFI":
+            boost = 0.88
+        weighted[token] = round(min(2.6, (1.0 + math.log1p(count)) * boost), 4)
+    ranked = sorted(
+        weighted.items(),
+        key=lambda item: (-item[1], -actual_counts[item[0]], -len(item[0]), item[0]),
+    )
+    return dict(ranked[:max_words])
+
+
+def wordcloud_summary(text: str, max_words: int = 30) -> dict[str, Any]:
+    weighted = wordcloud_frequencies(text, max_words)
+    actual_counts = Counter(_wordcloud_tokens(text))
+    ranked = sorted(
+        weighted,
+        key=lambda token: (-actual_counts[token], -weighted[token], -len(token), token),
+    )
+    return {
+        "word_count": len(weighted),
+        "top_words": [
+            {"word": token, "count": actual_counts[token]}
+            for token in ranked[:6]
+        ],
+    }
+
+
+def _wordcloud_font_path() -> Path:
+    for path in WORDCLOUD_FONT_CANDIDATES:
+        if path.exists():
+            return path
+    raise FileNotFoundError("未找到可用于中文词云的微软雅黑、黑体或宋体字体。")
+
+
+def _wordcloud_color(
+    word: str,
+    *_args: Any,
+    **_kwargs: Any,
+) -> str:
+    category = _wordcloud_term_categories().get(word, "")
+    category_colors = {
+        "organ": "#006d77",
+        "lesion": "#9b2c3b",
+        "echo": "#245a78",
+        "blood": "#0f766e",
+        "boundary": "#385170",
+        "shape": "#465b73",
+        "location": "#32746d",
+        "status": "#53657a",
+    }
+    if category in category_colors:
+        return category_colors[category]
+    palette = ("#006d77", "#245a78", "#385170", "#7f3545")
+    return palette[sum(ord(char) for char in word) % len(palette)]
+
+
+def generate_wordcloud_png(text: str) -> bytes:
+    frequencies = wordcloud_frequencies(text)
+    if not frequencies:
+        raise ValueError("当前文本过滤后没有可用于生成词云的有效医学词。")
+    max_font_size = 72 if len(frequencies) < 8 else 90
+    cloud = WordCloud(
+        font_path=str(_wordcloud_font_path()),
+        width=1200,
+        height=360,
+        background_color="white",
+        max_words=30,
+        max_font_size=max_font_size,
+        min_font_size=18,
+        random_state=42,
+        collocations=False,
+        prefer_horizontal=1.0,
+        relative_scaling=0.35,
+        margin=8,
+        color_func=_wordcloud_color,
+    ).generate_from_frequencies(frequencies)
+    output = BytesIO()
+    cloud.to_image().save(output, format="PNG")
+    return output.getvalue()
 
 
 def dataset_stats() -> dict[str, Any]:

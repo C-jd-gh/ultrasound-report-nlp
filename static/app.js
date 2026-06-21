@@ -1,6 +1,7 @@
 const state = {
   organ: "thyroid",
   sampleIndex: 0,
+  wordcloudUrl: null,
 };
 
 const algorithmNames = {
@@ -32,7 +33,8 @@ const els = Object.fromEntries(
     "reverseMeta", "agreementGrid", "differenceRows", "posTags",
     "unknownWords", "placeholders", "evaluationSummary", "organMetrics",
     "errorExamples", "datasetStats", "dictSummary", "stopwords",
-    "protectedPhrases", "dictGrid", "toast",
+    "protectedPhrases", "dictGrid", "wordcloudSummary", "wordcloudStatus",
+    "wordcloudFrame", "wordcloudImage", "wordcloudPlaceholder", "toast",
   ].map((id) => [id, document.querySelector(`#${id}`)])
 );
 
@@ -83,12 +85,70 @@ async function analyzeCurrent() {
       body: JSON.stringify({ organ: state.organ, text }),
     });
     renderAnalysis(data);
+    await loadWordcloud(text, data.wordcloud_summary || {});
   } catch (error) {
     showToast(error.message);
   } finally {
     els.analyzeBtn.disabled = false;
     els.analyzeBtn.textContent = "开始分词";
   }
+}
+
+function releaseWordcloudUrl() {
+  if (state.wordcloudUrl) {
+    URL.revokeObjectURL(state.wordcloudUrl);
+    state.wordcloudUrl = null;
+  }
+}
+
+async function loadWordcloud(text, summary) {
+  releaseWordcloudUrl();
+  els.wordcloudImage.hidden = true;
+  els.wordcloudImage.removeAttribute("src");
+  els.wordcloudFrame.classList.remove("has-image", "has-error");
+  els.wordcloudPlaceholder.hidden = false;
+  els.wordcloudPlaceholder.textContent = "正在生成词云...";
+  els.wordcloudStatus.textContent = "正在生成词云...";
+  renderWordcloudSummary(summary);
+  try {
+    const response = await fetch("/api/wordcloud", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ organ: state.organ, text }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload.error || `词云生成失败：${response.status}`);
+      }
+      const blob = await response.blob();
+      state.wordcloudUrl = URL.createObjectURL(blob);
+      await new Promise((resolve, reject) => {
+        els.wordcloudImage.onload = resolve;
+        els.wordcloudImage.onerror = () => reject(new Error("词云图片加载失败，请重新分词。"));
+        els.wordcloudImage.src = state.wordcloudUrl;
+      });
+      els.wordcloudImage.hidden = false;
+      els.wordcloudPlaceholder.hidden = true;
+      els.wordcloudFrame.classList.add("has-image");
+      els.wordcloudStatus.textContent = `使用 ${summary.word_count || 0} 个医学词生成`;
+    } catch (error) {
+      releaseWordcloudUrl();
+      els.wordcloudImage.hidden = true;
+      els.wordcloudImage.removeAttribute("src");
+      els.wordcloudFrame.classList.add("has-error");
+      els.wordcloudPlaceholder.hidden = false;
+      els.wordcloudPlaceholder.textContent = error.message;
+      els.wordcloudStatus.textContent = error.message;
+    }
+  }
+
+function renderWordcloudSummary(summary) {
+  const words = (summary.top_words || [])
+    .map((item) => `<span>${escapeHtml(item.word)} <small>×${escapeHtml(item.count)}</small></span>`)
+    .join("");
+  els.wordcloudSummary.innerHTML = `
+    <strong>有效医学词 ${escapeHtml(summary.word_count || 0)} 个</strong>
+    <div class="wordcloud-terms">${words || '<span class="empty-text">暂无有效词</span>'}</div>`;
 }
 
 function renderTokens(node, tokens, dictionaryTokens = new Set()) {
@@ -263,3 +323,5 @@ async function init() {
 }
 
 init();
+
+window.addEventListener("beforeunload", releaseWordcloudUrl);
